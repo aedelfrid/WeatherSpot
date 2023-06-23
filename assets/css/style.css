@@ -1,0 +1,38 @@
+* {
+    display: flex;
+    flex-flow: row wrap
+;
+}
+
+header {
+    background-color: blue;
+    flex-direction: row;
+}
+
+#citySelect {
+    display: flex;
+    flex-direction: column;
+    align-self: baseline;
+}
+
+#citySearchForm {
+    display: flex;
+    flex-direction: column;
+    align-self: baseline;
+}
+
+#cityButtonDiv {
+    display: flex;
+    flex-direction: column;
+    align-self: baseline;
+}
+
+#todayFCBody {
+    display: flex;
+    flex-direction: column;
+}
+
+#fiveDayFC {
+    display: flex;
+    flex-direction: row;
+}
