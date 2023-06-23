@@ -1,15 +1,17 @@
-let savedCities = ['Saint John', 'Toronto', 'Calgary', 'Vancouver'];
+let savedCities = ['Saint John', 'Toronto', 'Calgary', 'Vancouver']; 
 
-let selectedCity = `Saint John`
+let selectedCity = `Saint John`; //this will be empty/undefined in the future
 
-let elements = {
+const elements = {
     cityButtonDiv: document.querySelector('#cityButtonDiv'),
-    todayForecastBody: document.querySelector('#todayForecastBody')
+    todayFCBody: document.querySelector('#todayFCBody'),
+    fiveDayFCBody: document.querySelector('#fiveDayFC'),
+
 };
 
 let today = dayjs()
 
-const todayForecast = {
+const todayFC = {
     weatherIcon: './assets/images/istockphoto-1269411565-612x612.jpg',
     temp: `30*C`,
     wind: '12kp/h',
@@ -21,32 +23,32 @@ const todayForecast = {
 
 //need to fetch proper data
 
-const fiveDayForecast = [
-    dayOneForecast = {
+const fiveDayFC = [
+    dayOneFC = {
         weatherIcon: './assets/images/istockphoto-1269411565-612x612.jpg',
         temp: `30*C`,
         wind: '12kp/h',
         humidity: `72%`
     },
-    dayTwoForecast = {
+    dayTwoFC = {
         weatherIcon: './assets/images/istockphoto-1269411565-612x612.jpg',
         temp: `30*C`,
         wind: '12kp/h',
         humidity: `72%`
     },
-    dayThreeForecast = {
+    dayThreeFC = {
         weatherIcon: './assets/images/istockphoto-1269411565-612x612.jpg',
         temp: `30*C`,
         wind: '12kp/h',
         humidity: `72%`
     },
-    dayFourForecast = {
+    dayFourFC = {
         weatherIcon: './assets/images/istockphoto-1269411565-612x612.jpg',
         temp: `30*C`,
         wind: '12kp/h',
         humidity: `72%`
     },
-    dayFiveForecast = {
+    dayFiveFC = {
         weatherIcon: './assets/images/istockphoto-1269411565-612x612.jpg',
         temp: `30*C`,
         wind: '12kp/h',
@@ -55,37 +57,42 @@ const fiveDayForecast = [
 
 ];
 
-function generateCityButtons(city) {
+const generateCityButtons = (city) => {
     for (let i=0; i < city.length; i++) {
        elements.cityButtons = `<button id="button${i}">${city[i]}</button>`
        elements.cityButtonDiv.insertAdjacentHTML('beforeend', elements.cityButtons)
     }
 };
 
-function generateTodayForecast() {
-    elements.todayForecastText = 
+const generateTodayFC = () => {
+    elements.todayFCText = 
     `<h1>${selectedCity}(${today.format('MM/DD/YYYY')})</h1>
-    <img src="${todayForecast.weatherIcon}">
-    <p>${todayForecast.temp}</p>
-    <p>${todayForecast.wind}</p>
-    <p>${todayForecast.humidity}</p>`;
+    <img src="${todayFC.weatherIcon}">
+    <p>${todayFC.temp}</p>
+    <p>${todayFC.wind}</p>
+    <p>${todayFC.humidity}</p>`;
 
-    elements.todayForecastBody.insertAdjacentHTML('beforeend', elements.todayForecastText)
+    elements.todayFCBody.insertAdjacentHTML('beforeend', elements.todayFCText)
 }
 
-function generateFiveDayForecast() {
-    for (let i=0; i<fiveDayForecast.length; i++) {
-        elements.todayForecastText = 
+const generateFiveDayFC = () => {
+    for (let i=0; i<fiveDayFC.length; i++) {
+        elements.fiveDayFCText = 
         `<h1>${today.format('MM/DD/YYYY')}</h1>
-        <img src="${todayForecast.weatherIcon}">
-        <p>${todayForecast.temp}</p>
-        <p>${todayForecast.wind}</p>
-        <p>${todayForecast.humidity}</p>`;
+        <img src="${todayFC.weatherIcon}">
+        <p>${todayFC.temp}</p>
+        <p>${todayFC.wind}</p>
+        <p>${todayFC.humidity}</p>`;
+
+        elements.fiveDayFCBody.insertAdjacentHTML('beforeend', elements.fiveDayFCText);
     }
 }
 
 generateCityButtons(savedCities);
-generateTodayForecast()
+generateTodayFC();
+generateFiveDayFC();
 
 
 
+// button select city -> pulls data from api today and days 1-5  ->
+// carry current city forward and write data to forecast object
