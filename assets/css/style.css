@@ -1,7 +1,15 @@
-* {
+main {
     display: flex;
-    flex-flow: row wrap
-;
+    flex-flow: row wrap;
+}
+
+h1 {
+    display: inline-block;
+}
+
+.weatherIcon {
+    max-width: 2vw;
+    max-height: 2vh;
 }
 
 header {
@@ -11,28 +19,63 @@ header {
 
 #citySelect {
     display: flex;
-    flex-direction: column;
-    align-self: baseline;
+    flex: 1;
+    max-width: min-content;
+    max-height: 100vh;
+    flex-flow: column wrap;
+    flex-grow: 1;
+    padding: 2%;
+    border: solid black 2px;
 }
 
 #citySearchForm {
     display: flex;
-    flex-direction: column;
+    max-width: fit-content;
+    flex: 0;
+    flex-flow: column wrap;
+}
+
+#citySearchText {
+    display: flex;
+    flex: 1;
+    flex-flow: row wrap;
     align-self: baseline;
 }
 
 #cityButtonDiv {
     display: flex;
+    flex: 1;
     flex-direction: column;
     align-self: baseline;
 }
 
+#cityButtonDiv button {
+    background-color: grey;
+    min-width: 250px;
+    min-height: 30px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/*|| Forecast Styles*/
+
+#FCSections {
+    max-height: max-content;
+}
+
+.cards {
+    padding: 2%;
+    border: solid black 2px;
+}
+
 #todayFCBody {
-    display: flex;
-    flex-direction: column;
+    max-width: 70vw;
 }
 
 #fiveDayFC {
     display: flex;
-    flex-direction: row;
+}
+
+#fiveDayFC > div {
+    max-width: 10vw;
 }
