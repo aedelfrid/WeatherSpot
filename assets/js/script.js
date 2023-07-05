@@ -41,7 +41,7 @@ elements.citySearchButton.addEventListener('click', () => {
 
 /*|| API PULL ALGORITHMS */
 
-const API_KEY = 'c89d2b6eee9a9d6d4a1f10cf7f0471c1'
+const API_KEY = process.env.API_KEY
 
 
 const apiAlgo = async (selectedCity) => {
