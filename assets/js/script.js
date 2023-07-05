@@ -20,14 +20,14 @@ let unit = 'metric'
 
 /*|| City Select */
 
-
-
 elements.citySearchButton.addEventListener('click', () => {
     event.preventDefault()
 
     selectedCity = elements.cityTextArea.value;
 
-    if (!savedCities.includes(selectedCity)) {
+    let inSaved = savedCities.includes(selectedCity);
+
+    if (!inSaved) {
         savedCities.push(selectedCity)
     };
 
@@ -38,8 +38,6 @@ elements.citySearchButton.addEventListener('click', () => {
     
     generate(selectedCity);
 });
-
-
 
 /*|| API PULL ALGORITHMS */
 
@@ -99,10 +97,12 @@ const apiAlgo = async (selectedCity) => {
 }
 
 /*|| HTML GENERATION ALGORITHMS */
-
-
-
 const generate = async (selectedCity) => {
+    if (elements.todayFCText) {
+        $('.cards').remove()
+        $('.cityButton').remove()
+    };
+
     const Forecast = await apiAlgo(selectedCity);
 
     console.log(Forecast)
@@ -120,10 +120,33 @@ const generate = async (selectedCity) => {
     
     const generateCityButtons = (city) => {
         for (let i=0; i < city.length; i++) {
-           elements.cityButtons = `<button class='cityButton' id="button${i}">${city[i]}</button>`
-           elements.cityButtonDiv.insertAdjacentHTML('beforeend', elements.cityButtons)
-        }
+        elements.cityButtons = `<button class='cityButton' id="button">${city[i]}</button>`
+        elements.cityButtonDiv.insertAdjacentHTML('beforeend', elements.cityButtons)
     };
+
+    $('.cityButton').on('click', () => {
+        event.preventDefault();
+
+        console.log(event.target.innerHTML == selectedCity)
+
+        _isSelected = event.target.innerHTML == selectedCity;
+
+        if (!_isSelected) {
+            elements.cityTextArea.value = event.target.innerHTML;
+            selectedCity = elements.cityTextArea.value;
+        
+            if (elements.todayFCText) {
+                $('.cards').remove()
+                $('.cityButton').remove()
+            };
+            
+            generate(selectedCity);
+            return
+        } else {
+            return
+        }
+    });
+}
     
     const generateTodayFC = () => {
         elements.todayFCText = 
@@ -166,7 +189,10 @@ const generate = async (selectedCity) => {
     generateFiveDayFC();
 };
 
-generate(selectedCity);
+
+(() => {
+    generate(selectedCity);
+})();
 
 
 
