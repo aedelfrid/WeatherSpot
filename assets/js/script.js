@@ -1,15 +1,47 @@
-let savedCities = ['Saint John', 'Toronto', 'Calgary', 'Vancouver','New York', 
-'Atlanta', 'Nashville','Los Angeles','San Franciso','Las Vegas','Portland','Seattle']; 
+const elements = {
+    cityButtonDiv: document.querySelector('#cityButtonDiv'),
+    citySearchText: document.querySelector('#citySearchText'),
+    citySearchButton: cityTextArea.nextElementSibling,
+    todayFCBody: document.querySelector('#todayFCBody'),
+    fiveDayFCBody: document.querySelector('#fiveDayFC'),
+    cityTextArea: document.querySelector('#cityTextArea'),
 
-let selectedCity = `Saint John`; //this will be empty/undefined in the future
+};
+
+let savedCities = [];
+
+elements.cityTextArea.value = 'Saint John';
+
+let selectedCity =`${elements.cityTextArea.value}`;
 
 const units = ['standard', 'metric', 'imperial']
 
 let unit = 'metric'
 
+/*|| City Select */
+
+elements.citySearchButton.addEventListener('click', () => {
+    event.preventDefault()
+
+    selectedCity = elements.cityTextArea.value;
+
+    let inSaved = savedCities.includes(selectedCity);
+
+    if (!inSaved) {
+        savedCities.push(selectedCity)
+    };
+
+    if (elements.todayFCText) {
+        $('.cards').remove()
+        $('.cityButton').remove()
+    };
+    
+    generate(selectedCity);
+});
+
 /*|| API PULL ALGORITHMS */
 
-const API_KEY = 'c89d2b6eee9a9d6d4a1f10cf7f0471c1'
+const API_KEY = process.env.API_KEY
 
 
 const apiAlgo = async (selectedCity) => {
@@ -23,21 +55,7 @@ const apiAlgo = async (selectedCity) => {
         }
         
         const data = await response.json();
-        return data;
-    
-        /*switch (url) {
-            case getFiveFC:
-                data;
-                break;
-            case geoCodeCity:
-                data = await response[2].JSON();
-                break;
-            default:
-                console.log('ERROR API PULL')
-        }
-        */
-    
-       
+        return data;       
     };
 
     const geoCodeCity = `http://api.openweathermap.org/geo/1.0/direct?q=${selectedCity}&limit=1&appid=${API_KEY}`
@@ -79,21 +97,15 @@ const apiAlgo = async (selectedCity) => {
 }
 
 /*|| HTML GENERATION ALGORITHMS */
+const generate = async (selectedCity) => {
+    if (elements.todayFCText) {
+        $('.cards').remove()
+        $('.cityButton').remove()
+    };
 
-
-
-(async () => {
     const Forecast = await apiAlgo(selectedCity);
 
     console.log(Forecast)
-
-    const elements = {
-        cityButtonDiv: document.querySelector('#cityButtonDiv'),
-        todayFCBody: document.querySelector('#todayFCBody'),
-        fiveDayFCBody: document.querySelector('#fiveDayFC'),
-        cityTextArea: document.querySelector('#cityTextArea'),
-    
-    };
     
     let today = dayjs()
     
@@ -108,19 +120,42 @@ const apiAlgo = async (selectedCity) => {
     
     const generateCityButtons = (city) => {
         for (let i=0; i < city.length; i++) {
-           elements.cityButtons = `<button id="button${i}">${city[i]}</button>`
-           elements.cityButtonDiv.insertAdjacentHTML('beforeend', elements.cityButtons)
-        }
+        elements.cityButtons = `<button class='cityButton' id="button">${city[i]}</button>`
+        elements.cityButtonDiv.insertAdjacentHTML('beforeend', elements.cityButtons)
     };
+
+    $('.cityButton').on('click', () => {
+        event.preventDefault();
+
+        console.log(event.target.innerHTML == selectedCity)
+
+        _isSelected = event.target.innerHTML == selectedCity;
+
+        if (!_isSelected) {
+            elements.cityTextArea.value = event.target.innerHTML;
+            selectedCity = elements.cityTextArea.value;
+        
+            if (elements.todayFCText) {
+                $('.cards').remove()
+                $('.cityButton').remove()
+            };
+            
+            generate(selectedCity);
+            return
+        } else {
+            return
+        }
+    });
+}
     
     const generateTodayFC = () => {
         elements.todayFCText = 
             `<div class="cards" id='TodayFCDiv'>
                 <h1>${selectedCity}(${today.format('MM/DD/YYYY')})</h1>
-                <img class="weatherIcon" src="${todayFC.weather[0].icon}" alt='${todayFC.weather.main}'>
-                <p>${todayFC.main.temp}C</p>
-                <p>${todayFC.wind.speed}km/h</p>
-                <p>${todayFC.main.humidity}%</p>
+                <img class="weatherIcon" src="http://openweathermap.org/img/w/${todayFC.weather[0].icon}.png" alt='${todayFC.weather.main}'>
+                <p>Temp: ${todayFC.main.temp}C</p>
+                <p>Wind: ${todayFC.wind.speed}km/h</p>
+                <p>Humidity: ${todayFC.main.humidity}%</p>
             </div>`;
     
         elements.todayFCBody.insertAdjacentHTML('beforeend', elements.todayFCText)
@@ -128,22 +163,23 @@ const apiAlgo = async (selectedCity) => {
     
     const generateFiveDayFC = () => {
         for (let i=0; i<fiveDayFC.length; i++) {
+
+            let dt = fiveDayFC[i].dt;
+
+            let day = dayjs(new Date(dt*1000))
+
             elements.fiveDayFCText = 
-                `<div class="cards">
-                    <h1>${today.format('MM/DD/YYYY')}</h1>
-                    <img class="weatherIcon" src="${fiveDayFC[i].weather[0].icon}" alt='${fiveDayFC[i].weather.main}'>
-                    <p>${fiveDayFC[i].main.temp}C</p>
-                    <p>${fiveDayFC[i].wind.speed}km/h</p>
-                    <p>${fiveDayFC[i].main.humidity}%</p>
+                `<div id='fiveDayFCcard'class="cards">
+                    <h1>${day.format('MM/DD/YYYY')}</h1>
+                    <img class="weatherIcon" src="http://openweathermap.org/img/w/${todayFC.weather[0].icon}.png" alt='${fiveDayFC[i].weather.main}'>
+                    <p>Temp: ${fiveDayFC[i].main.temp}C</p>
+                    <p>Wind: ${fiveDayFC[i].wind.speed}km/h</p>
+                    <p>Humidity: ${fiveDayFC[i].main.humidity}%</p>
                 </div>`;
     
             elements.fiveDayFCBody.insertAdjacentHTML('beforeend', elements.fiveDayFCText);
         }
     }
-
-    elements.cityTextArea.value = selectedCity;
-
-    selectedCity = elements.cityTextArea.value;
 
     // button select city -> pulls data from api today and days 1-5  ->
     // carry current city forward and write data to forecast object
@@ -151,6 +187,11 @@ const apiAlgo = async (selectedCity) => {
     generateCityButtons(savedCities);
     generateTodayFC();
     generateFiveDayFC();
+};
+
+
+(() => {
+    generate(selectedCity);
 })();
 
 
