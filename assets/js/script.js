@@ -59,7 +59,7 @@ const apiAlgo = async (selectedCity) => {
         return data;       
     };
 
-    const geoCodeCity = `https://api.openweathermap.org/geo/1.0/direct?q=${selectedCity}&limit=1&appid=${API_KEY}`
+    const geoCodeCity = `http://api.openweathermap.org/geo/1.0/direct?q=${selectedCity}&limit=1&appid=${API_KEY}`
 
     const  repsonseGeoCode = await apiPull(geoCodeCity)
     const dataGeoCode = await repsonseGeoCode;
