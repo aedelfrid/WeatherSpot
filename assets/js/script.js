@@ -8,13 +8,22 @@ const elements = {
 
 };
 
-let savedCities = [];
+if (!localStorage.storedCities) {
+    localStorage.storedCities = [];
+}
+
+if (localStorage.storedCities.length > 0) {
+    storedCities = localStorage.getItem('storedCities')
+    savedCities = storedCities ? JSON.parse(storedCities) : [];
+} else {
+    savedCities = [];
+}
+
+localStorage.storedCities = [savedCities];
 
 elements.cityTextArea.value = 'Saint John';
 
 let selectedCity =`${elements.cityTextArea.value}`;
-
-const units = ['standard', 'metric', 'imperial']
 
 let unit = 'metric'
 
@@ -29,6 +38,8 @@ elements.citySearchButton.addEventListener('click', () => {
 
     if (!inSaved) {
         savedCities.push(selectedCity)
+        localStorage.clear()
+        localStorage.setItem('storedCities',JSON.stringify(savedCities))
     };
 
     if (elements.todayFCText) {
@@ -41,7 +52,7 @@ elements.citySearchButton.addEventListener('click', () => {
 
 /*|| API PULL ALGORITHMS */
 
-const API_KEY = process.env.API_KEY
+const API_KEY = 'c89d2b6eee9a9d6d4a1f10cf7f0471c1'
 
 
 const apiAlgo = async (selectedCity) => {
