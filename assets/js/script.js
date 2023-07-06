@@ -8,18 +8,8 @@ const elements = {
 
 };
 
-if (!localStorage.storedCities) {
-    localStorage.storedCities = [];
-}
-
-if (localStorage.storedCities.length > 0) {
-    storedCities = localStorage.getItem('storedCities')
-    savedCities = storedCities ? JSON.parse(storedCities) : [];
-} else {
-    savedCities = [];
-}
-
-localStorage.storedCities = [savedCities];
+storedCities = localStorage.getItem('storedCities')
+savedCities = storedCities ? JSON.parse(storedCities) : [];
 
 elements.cityTextArea.value = 'Saint John';
 
@@ -69,28 +59,28 @@ const apiAlgo = async (selectedCity) => {
         return data;       
     };
 
-    const geoCodeCity = `http://api.openweathermap.org/geo/1.0/direct?q=${selectedCity}&limit=1&appid=${API_KEY}`
+    const geoCodeCity = `https://api.openweathermap.org/geo/1.0/direct?q=${selectedCity}&limit=1&appid=${API_KEY}`
 
     const  repsonseGeoCode = await apiPull(geoCodeCity)
     const dataGeoCode = await repsonseGeoCode;
     const lat = (dataGeoCode[0].lat);
     const lon = (dataGeoCode[0].lon);
 
-    console.log(`lat ${lat} lon ${lon}`)
+    //console.log(`lat ${lat} lon ${lon}`)
 
     const currentFcURL = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=${unit}&appid=${API_KEY}`
 
     const responseCurrentFC = await apiPull(currentFcURL)
     const datacurrentFC = await responseCurrentFC;
 
-    console.log(datacurrentFC)
+    //console.log(datacurrentFC)
 
     const fiveFcURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=${unit}&appid=${API_KEY}`
     
     const responseFiveFC = await apiPull(fiveFcURL)
     const dataFiveFC = await responseFiveFC;
 
-    console.log(dataFiveFC)
+    //console.log(dataFiveFC)
 
     const Forecast = [
         current = datacurrentFC,
@@ -116,7 +106,7 @@ const generate = async (selectedCity) => {
 
     const Forecast = await apiAlgo(selectedCity);
 
-    console.log(Forecast)
+    //console.log(Forecast)
     
     let today = dayjs()
     
@@ -138,7 +128,7 @@ const generate = async (selectedCity) => {
     $('.cityButton').on('click', () => {
         event.preventDefault();
 
-        console.log(event.target.innerHTML == selectedCity)
+        //console.log(event.target.innerHTML == selectedCity)
 
         _isSelected = event.target.innerHTML == selectedCity;
 
